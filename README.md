@@ -23,27 +23,25 @@ $ curl http://0.0.0.0:8080/echo/I_love_Dart
 I_love_Dart
 ```
 
-## Running with Docker
+## Ligne de commande
 
-If you have [Docker Desktop](https://www.docker.com/get-started) installed, you
-can build and run with the `docker` command:
-
+# Récupérer tous les snippets
 ```
-$ docker build . -t myserver
-$ docker run -it -p 8080:8080 myserver
-Server listening on port 8080
+curl -X GET http://localhost:8080/snippets
 ```
-
-And then from a second terminal:
+# Récupérer un snippet par ID
 ```
-$ curl http://0.0.0.0:8080
-Hello, World!
-$ curl http://0.0.0.0:8080/echo/I_love_Dart
-I_love_Dart
+curl -X GET http://localhost:8080/snippets/<id>
 ```
-
-You should see the logging printed in the first terminal:
+# Créer un nouveau snippet
 ```
-2021-05-06T15:47:04.620417  0:00:00.000158 GET     [200] /
-2021-05-06T15:47:08.392928  0:00:00.001216 GET     [200] /echo/I_love_Dart
+curl -X POST http://localhost:8080/snippets -H "Content-Type: application/json" -d '{"code": "print(\"Hello, World!\");", "description": "A simple hello world program in Dart"}'
+```
+# Mettre à jour un snippet
+```
+curl -X PUT http://localhost:8080/snippets/<id> -H "Content-Type: application/json" -d '{"code": "print(\"Hello, Dart!\");", "description": "An updated hello world program in Dart"}'
+```
+# Supprimer un snippet
+```
+curl -X DELETE http://localhost:8080/snippets/<id>
 ```
