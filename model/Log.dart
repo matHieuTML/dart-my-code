@@ -1,13 +1,25 @@
-class Log 
-{
-  String _message;
-  DateTime _time;
+import 'package:mongo_dart/mongo_dart.dart';
 
-  Log(this._message, this._time);
+class Logs {
+  late ObjectId id; 
+  late ObjectId contentId; 
+  late ObjectId userId; 
+  late DateTime createdAt;
 
-  String get message => _message;
-  DateTime get time => _time;
+  Logs(this.contentId, this.userId, this.createdAt);
 
-  set message(String message) => _message = message;
-  set time(DateTime time) => _time = time;
+  Map<String, dynamic> toMap() {
+    return {
+      'contentId': contentId,
+      'userId': userId,
+      'createdAt': createdAt,
+    };
+  }
+
+  Logs.fromMap(Map<String, dynamic> map) {
+    id = map['_id'];
+    contentId = map['contentId'];
+    userId = map['userId'];
+    createdAt = map['createdAt'];
+  }
 }
