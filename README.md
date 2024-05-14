@@ -23,25 +23,25 @@ $ curl http://0.0.0.0:8080/echo/I_love_Dart
 I_love_Dart
 ```
 
-## Ligne de commande
+# Ligne de commande
 
-# Récupérer tous les snippets
+## Récupérer tous les snippets
 ```
 curl -X GET http://localhost:8080/snippets
 ```
-# Récupérer un snippet par ID
+## Récupérer un snippet par ID
 ```
 curl -X GET http://localhost:8080/snippets/<id>
 ```
-# Créer un nouveau snippet
+## Créer un nouveau snippet
 ```
 curl -X POST http://localhost:8080/snippets -H "Content-Type: application/json" -d '{"code": "print(\"Hello, World!\");", "description": "A simple hello world program in Dart"}'
 ```
-# Mettre à jour un snippet
+## Mettre à jour un snippet
 ```
 curl -X PUT http://localhost:8080/snippets/<id> -H "Content-Type: application/json" -d '{"code": "print(\"Hello, Dart!\");", "description": "An updated hello world program in Dart"}'
 ```
-# Supprimer un snippet
+## Supprimer un snippet
 ```
 curl -X DELETE http://localhost:8080/snippets/<id>
 ```
