@@ -6,6 +6,8 @@ import 'package:shelf_router/shelf_router.dart';
 import '../routes/content_routes.dart';
 import '../services/bdd_service.dart';
 
+import '../routes/user_routes.dart';
+
 void main(List<String> args) async {
   // Charge les variables d'environnement depuis le fichier .env
   var env = DotEnv()..load();
@@ -27,6 +29,16 @@ void main(List<String> args) async {
     
     router.get('/content/<id>', (request) async {
       return contentRoutes.handleGetRequest(request);
+    });
+
+    router.get('/user/<id>', (request) async {
+      final userRoutes = UserRoutes();
+      return userRoutes.handleGetRequest(request);
+    });
+
+    router.post('/user', (request) async {
+      final userRoutes = UserRoutes();
+      return userRoutes.handlePostRequest(request);
     });
 
     return router(request);
