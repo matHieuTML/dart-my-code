@@ -3,8 +3,9 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:dotenv/dotenv.dart';
 import 'package:shelf_router/shelf_router.dart';
-import '../routes/content_routes.dart';
 import '../services/bdd_service.dart';
+
+import '../routes/content_routes.dart';
 
 import '../routes/user_routes.dart';
 
