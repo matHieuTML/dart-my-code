@@ -9,6 +9,11 @@ First install all dependencies
 dart pub get
 ```
 
+## Launch server
+```
+nodemon -x "dart run bin/server.dart" -e dart
+```
+
 # Ligne de commande
 
 ## Récupérer tous les snippets

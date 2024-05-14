@@ -1,57 +1,37 @@
 import 'dart:io';
-
-import 'package:mongo_dart/mongo_dart.dart';
 import 'package:shelf/shelf.dart';
-import 'package:shelf/shelf_io.dart';
+import 'package:shelf/shelf_io.dart' as io;
 import 'package:shelf_router/shelf_router.dart';
-import 'package:dotenv/dotenv.dart';
-
-// Configure routes.
-final _router = Router()
-  ..get('/', _rootHandler)
-  ..get('/echo/<message>', _echoHandler);
-
-Response _rootHandler(Request req) {
-  return Response.ok('Hello, World!\n');
-}
-
-Response _echoHandler(Request request) {
-  final message = request.params['message'];
-  return Response.ok('$message\n');
-}
+import '../routes/content_routes.dart';
+import '../services/bdd_service.dart';
 
 void main(List<String> args) async {
-  // Charge les variables d'environnement depuis le fichier .env
-  var env = DotEnv(includePlatformEnvironment: true)..load();
+  // Initialise le service de base de données
+  final databaseService = DatabaseService();
+  await databaseService.connect();
 
-  // Utilisez les variables d'environnement chargées
-  final mongodbUri = env['MONGODB_URI'];
+  // Crée une instance de ContentRoutes
+  final contentRoutes = ContentRoutes();
 
-  // Connectez-vous à la base de données MongoDB
-  final db = await Db.create(mongodbUri!);
+  // Configure les routes avec les handlers de ContentRoutes
+  final handler = Pipeline().addMiddleware(logRequests()).addHandler((request) {
+    final router = Router();
 
-  try {
-    await db.open();
-    if (db.isConnected) {
-      print('Connexion à la base de données MongoDB réussie !');
-    } else {
-      print('Échec de la connexion à la base de données MongoDB.');
-    }
-  } catch (e) {
-    print('Erreur lors de la connexion à la base de données MongoDB : $e');
-  } finally {
-    await db.close(); // Fermez toujours la connexion après utilisation
-  }
+    router.post('/content', (request) async {
+      return contentRoutes.handlePostRequest(request);
+    });
+    
+    router.get('/content/<id>', (request) async {
+      return contentRoutes.handleGetRequest(request);
+    });
 
-  // Use any available host or container IP (usually `0.0.0.0`).
-  final ip = InternetAddress.anyIPv4;
+    return router(request);
+  });
 
-  // Configure a pipeline that logs requests.
-  final handler =
-      Pipeline().addMiddleware(logRequests()).addHandler(_router.call);
+  // Obtenez le port du processus ou utilisez un port par défaut
+  final port = int.parse(Platform.environment['PORT'] ?? '8080');
 
-  // For running in containers, we respect the PORT environment variable.
-  final port = int.parse(Platform.environment['PORT'] ?? '7456');
-  final server = await serve(handler, ip, port);
+  // Démarre le serveur sur toutes les interfaces IP disponibles
+  final server = await io.serve(handler, InternetAddress.anyIPv4, port);
   print('Server listening on port ${server.port}');
 }
