@@ -4,6 +4,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:dotenv/dotenv.dart';
 
 // Configure routes.
 final _router = Router()
@@ -20,9 +21,15 @@ Response _echoHandler(Request request) {
 }
 
 void main(List<String> args) async {
-  // Connect to a MongoDB database.
-  final db = await Db.create(
-      'mongodb+srv://Abder951:Abder2002@cluster0.jngetun.mongodb.net/shareMyCode/');
+  // Charge les variables d'environnement depuis le fichier .env
+  var env = DotEnv(includePlatformEnvironment: true)..load();
+
+  // Utilisez les variables d'environnement chargées
+  final mongodbUri = env['MONGODB_URI'];
+
+  // Connectez-vous à la base de données MongoDB
+  final db = await Db.create(mongodbUri!);
+
   try {
     await db.open();
     if (db.isConnected) {
