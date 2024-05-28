@@ -3,11 +3,11 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
 import 'package:dotenv/dotenv.dart';
 import 'package:shelf_router/shelf_router.dart';
-import '../services/bdd_service.dart';
+import 'services/bdd_service.dart';
 
-import '../routes/content_routes.dart';
+import 'routes/content_routes.dart';
 
-import '../routes/user_routes.dart';
+import 'routes/user_routes.dart';
 
 void main(List<String> args) async {
   // Charge les variables d'environnement depuis le fichier .env
