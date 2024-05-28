@@ -24,7 +24,7 @@ class UserController {
     }
   }
 
-  Future<void> connexion(String? email, String? password) async {
+  Future<ObjectId?> connexion(String? email, String? password) async {
     if (email != null && password != null) {
       // mdp hash
       var bytes = utf8.encode(password); 
@@ -37,8 +37,9 @@ class UserController {
         'password': digest.toString(),
       });
       await _databaseService.close();
-      return user != null ? user['_id'] : null;
+      return user != null ? user['_id'] as ObjectId : null;
     }
+    return null;
   }
 
   Future<String?> getUser(ObjectId id) async {
