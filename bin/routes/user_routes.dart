@@ -39,4 +39,29 @@ class UserRoutes {
       return Response.notFound('Utilisateur non trouvé.');
     }
   }
+
+  Future<Response> handleConnexionRequest(Request request) async {
+    final form = await request.readAsString();
+    final List<String> userData = form.split('&');
+    final Map<String, String?> userMap = {};
+
+    for (final data in userData) {
+      final List<String> keyValue = data.split('=');
+      userMap[keyValue[0]] = keyValue.length > 1 ? keyValue[1] : null;
+    }
+
+    final email = userMap['email'];
+    final password = userMap['password'];
+
+    if (email != null && password != null) {
+      final id = await _userController.connexion(email, password);
+      if (id != null) {
+        return Response.ok(id.toString());
+      } else {
+        return Response.notFound('Utilisateur non trouvé.');
+      }
+    } else {
+      return Response.notFound('L\'utilisateur n\'as pas pu être connecté.');
+    }
+  }
 }

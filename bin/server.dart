@@ -42,6 +42,11 @@ void main(List<String> args) async {
       return userRoutes.handlePostRequest(request);
     });
 
+    router.post('/connexion', (request) async {
+      final userRoutes = UserRoutes();
+      return userRoutes.handleConnexionRequest(request);
+    });
+
     return router(request);
   });
 

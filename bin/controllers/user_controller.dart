@@ -24,6 +24,23 @@ class UserController {
     }
   }
 
+  Future<void> connexion(String? email, String? password) async {
+    if (email != null && password != null) {
+      // mdp hash
+      var bytes = utf8.encode(password); 
+      var digest = sha256.convert(bytes);
+
+      await _databaseService.connect();
+      final usersCollection = _databaseService.db.collection('users');
+      final user = await usersCollection.findOne({
+        'email': Uri.decodeComponent(email),
+        'password': digest.toString(),
+      });
+      await _databaseService.close();
+      return user != null ? user['_id'] : null;
+    }
+  }
+
   Future<String?> getUser(ObjectId id) async {
     await _databaseService.connect();
     final usersCollection = _databaseService.db.collection('users');
